@@ -19,7 +19,7 @@ install:
   - conda info -a
   - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION
   - source activate $REPO
-  - pip install .
+  - pip install -e .
   - conda install nomkl --file requirements.txt
   - pip install codecov
 
