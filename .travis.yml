@@ -16,13 +16,13 @@ install:
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
   - conda info -a
-  - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION nomkl --file requirements.txt
+  - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION
   - source activate $REPO
-  - conda update --all
-  - pip install codecov
   - pip install .
+  - conda install nomkl --file requirements.txt
+  - pip install codecov
+
 
 script:
   - nosetests --cover-package=$REPO --with-coverage
