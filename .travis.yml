@@ -16,7 +16,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION --file requirements.txt nomkl
+  - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION nomkl --file requirements.txt
   - source activate $REPO
   - pip install -e .
   - pip install codecov
