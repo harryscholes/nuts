@@ -9,6 +9,11 @@ env:
   global:
     - REPO=nuts
 
+cache:
+   pip: true
+   directories:
+       - $HOME/miniconda
+
 install:
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -p $HOME/miniconda
@@ -18,8 +23,9 @@ install:
   - conda info -a
   - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION nomkl --file requirements.txt
   - source activate $REPO
-  - pip install -e .
+  - conda update --all
   - pip install codecov
+  - pip install .
 
 script:
   - nosetests --cover-package=$REPO --with-coverage
