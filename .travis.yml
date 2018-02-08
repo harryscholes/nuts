@@ -23,7 +23,9 @@ install:
   # - pip install git+https://github.com/harryscholes/nuts
   - conda install nomkl --file requirements.txt
   - pip install codecov
-  - export PYTHONPATH=$PWD/$REPO
+  - echo $PYTHONPATH
+  - export PYTHONPATH=$PYTHONPATH:$PWD
+  - echo $PYTHONPATH
 
 
 script:
