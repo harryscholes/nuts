@@ -3,7 +3,7 @@ sudo: false
 language: python
 
 python:
-  - "3.6"
+  - 3.6
 
 env:
   global:
@@ -17,10 +17,12 @@ install:
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda config --set always_yes yes --set changeps1 no
   - conda info -a
-  - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION
-  - source activate $REPO
-  - conda install nomkl --file requirements.txt
-  - pip install codecov
+  # - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION
+  # - source activate $REPO
+  # - conda install nomkl --file requirements.txt
+  # - pip install codecov
+  - conda env create -f conda_environment.yml
+  - conda activate nuts
   - export PYTHONPATH=$PYTHONPATH:$PWD
 
 
