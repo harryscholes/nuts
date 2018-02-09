@@ -17,7 +17,7 @@ before_install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - sed -i '/python/c python=$TRAVIS_PYTHON_VERSION' conda_environment.yml
+  - sed -i "/python/c python=${TRAVIS_PYTHON_VERSION}" conda_environment.yml
   - sed -i -e '/nb_conda/d' -e '/jupyter/d' conda_environment.yml
   - echo "  - nomkl" >> conda_environment.yml
   - conda env create -f conda_environment.yml
