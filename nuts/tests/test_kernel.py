@@ -36,6 +36,40 @@ class test_Kernel():
         self.k.eigenvalues = [-0.3, -0.1]
         assert_raises(InvalidKernel, self.k.valid, tolerance=0.2)
 
+    def test_normalize(self):
+        self.k.kernel = np.array([[1, 3], [3, 4]])
+        self.k.normalize()
+        calculated = self.k.kernel
+        target = np.array([[1., 1.5], [1.5, 1.]])
+
+        # check shape of the matrix
+        assert calculated.shape == calculated.shape
+
+        # check diagonal values are all 1
+        assert np.all(np.diag(calculated) == 1.)
+
+        # check calculated == target
+        assert (calculated == target).all()
+
+    def test_make_valid(self):
+
+        def factory(eigenvalues):
+            self.k.eigenvalues = eigenvalues
+
+            try:
+                self.k.valid()
+            except InvalidKernel:
+                self.k.make_valid()
+                return self.k
+
+        # all negative
+        k = factory([-1, -2])
+        assert k.is_valid
+
+        # mixture of positive and negative
+        k = factory([-1, 2])
+        assert k.is_valid
+
 
 def test_valid():
     # all positive

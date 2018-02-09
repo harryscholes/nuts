@@ -57,7 +57,7 @@ class Kernel(object):
 
         self.tolerance = tolerance
         self.is_valid = False
-        
+
         if _valid_eigenvalues(self.eigenvalues, self.tolerance) is True:
             self.is_valid = True
             return True
@@ -65,7 +65,7 @@ class Kernel(object):
     def make_valid(self):
         """ Make the matrix a valid kernel by shifting its eigenvalues. """
 
-        assert self.is_valid is False
+        assert not self.is_valid
 
         smallest_eigenvalue = np.real(self.eigenvalues).min()
         np.fill_diagonal(self.kernel,
@@ -74,7 +74,7 @@ class Kernel(object):
         self.eigenvalues = np.linalg.eigvals(self.kernel)
 
         self.valid()
-        assert self.is_valid is True
+        assert self.is_valid
 
     def normalize(self, overwrite=True):
         """
