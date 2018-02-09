@@ -8,20 +8,36 @@ python:
 env:
   global:
     - REPO=$(basename $TRAVIS_REPO_SLUG)
+    - MINICONDA=$HOME/miniconda
 
 cache:
  directories:
-  - $HOME/miniconda
+  - $MINICONDA
 
 before_install:
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
+  - |
+    if [ -d "$MINICONDA" ] && [ -e "$MINICONDA/bin/conda" ]; then
+      echo "Miniconda install already present from cache: $MINICONDA"
+    else
+      rm -rf "$MINICONDA" # remove the directory in case we have an empty cached directory
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+      bash miniconda.sh -b -p $MINICONDA
+    fi
+  - export PATH="$MINICONDA/bin:$PATH"
   - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
   - conda info -a
-  - sed -i -e '/nb_conda/d' -e '/jupyter/d' conda_environment.yml
-  - conda env create -f conda_environment.yml nomkl
-  - source activate nuts
+  - export CONDA_ENVS=$(conda env list)
+  - |
+    if [[ $CONDA_ENVS == *$REPO* ]]; then
+    conda update -n $REPO --all
+    else
+    sed -i -e '/nb_conda/d' -e '/jupyter/d' conda_environment.yml
+    echo "  - nomkl" >> conda_environment.yml
+    conda env create -f conda_environment.yml nomkl
+    fi
+  -
+  - source activate $REPO
 
 install:
   - export PYTHONPATH=$PYTHONPATH:$PWD
