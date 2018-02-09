@@ -32,7 +32,7 @@ Kernels can be normalized using the cosine of the matrix by `k.normalize()`.
 To save the kernels to disk and and reload them
 ```python
 
-k.save(filepath, ...)
+k.write(filepath, ...)
 
 from nuts.io import load_from_hdf5
 load_from_hdf5(filepath)
