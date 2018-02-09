@@ -20,6 +20,7 @@ before_install:
   - sed -i "/python/c python=${TRAVIS_PYTHON_VERSION}" conda_environment.yml
   - sed -i -e '/nb_conda/d' -e '/jupyter/d' conda_environment.yml
   - echo "  - nomkl" >> conda_environment.yml
+  - cat conda_environment.yml
   - conda env create -f conda_environment.yml
   - source activate $REPO
 
