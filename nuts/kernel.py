@@ -57,12 +57,10 @@ class Kernel(object):
 
         self.tolerance = tolerance
         self.is_valid = False
-        try:
-            if _valid_eigenvalues(self.eigenvalues, self.tolerance) is True:
-                self.is_valid = True
-                return True
-        except InvalidKernel:
-            return False
+        
+        if _valid_eigenvalues(self.eigenvalues, self.tolerance) is True:
+            self.is_valid = True
+            return True
 
     def make_valid(self):
         """ Make the matrix a valid kernel by shifting its eigenvalues. """
@@ -80,7 +78,7 @@ class Kernel(object):
 
     def normalize(self, overwrite=True):
         """
-        Normalize the kernel using the cosine of the matrix.
+        Normalize the kernel by calculating the cosine of the matrix.
 
         Args:
             overwrite (bool): overwrite the kernel attribute with the
