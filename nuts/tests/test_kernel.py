@@ -37,10 +37,25 @@ class test_Kernel():
         assert_raises(InvalidKernel, self.k.valid, tolerance=0.2)
 
     def test_normalize(self):
+        target = np.array([[1., 1.5], [1.5, 1.]])
+
+        # test overwrite mode
         self.k.kernel = np.array([[1, 3], [3, 4]])
         self.k.normalize()
         calculated = self.k.kernel
-        target = np.array([[1., 1.5], [1.5, 1.]])
+
+        # check shape of the matrix
+        assert calculated.shape == calculated.shape
+
+        # check diagonal values are all 1
+        assert np.all(np.diag(calculated) == 1.)
+
+        # check calculated == target
+        assert (calculated == target).all()
+
+        # test non-overwrite mode
+        self.k.normalize(overwrite=False)
+        calculated = self.k.normalized_kernel
 
         # check shape of the matrix
         assert calculated.shape == calculated.shape

@@ -1,6 +1,7 @@
 """ Calculate kernels of graphs. """
 
 import numpy as np
+import tables
 
 from .kernel_functions import CT
 from .exceptions import InvalidKernel
@@ -90,7 +91,7 @@ class Kernel(object):
         else:
             self.normalized_kernel = _normalize(self.kernel)
 
-    def save(self, filename, save_mapping=True, compression=False):
+    def write(self, filename, save_mapping=True, compression=False):
         """
         Save the kernel to HDF5.
 
@@ -98,11 +99,13 @@ class Kernel(object):
             save_mapping (bool): include the node to matrix index mapping
             compression (bool): compress the HDF5 file
         """
-        write_to_hdf5(kernel=self.kernel,
-                      filepath=filename,
-                      mapping=self.mapping if save_mapping is True else None,
-                      compression=compression,
-                      )
+        with tables.open_file(filename, "a") as fileobj:
+
+            write_to_hdf5(kernel=self.kernel,
+                          fileobj=fileobj,
+                          mapping=self.mapping if save_mapping is True else None,
+                          compression=compression,
+                          )
 
 
 def _valid_eigenvalues(eigenvalues, tolerance=np.finfo(float).eps):
