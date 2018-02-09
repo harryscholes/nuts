@@ -7,7 +7,7 @@ python:
 
 env:
   global:
-    - REPO=nuts
+    - REPO=$(basename $TRAVIS_REPO_SLUG)
 
 cache: pip
 
@@ -19,13 +19,9 @@ install:
   - conda info -a
   - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION
   - source activate $REPO
-  # - pip install -e .
-  # - pip install git+https://github.com/harryscholes/nuts
   - conda install nomkl --file requirements.txt
   - pip install codecov
-  - echo $PYTHONPATH
   - export PYTHONPATH=$PYTHONPATH:$PWD
-  - echo $PYTHONPATH
 
 
 script:
