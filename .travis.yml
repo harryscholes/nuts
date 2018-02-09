@@ -3,26 +3,44 @@ sudo: false
 language: python
 
 python:
-  - "3.6"
+  - 3.6
 
 env:
   global:
     - REPO=$(basename $TRAVIS_REPO_SLUG)
+    - MINICONDA=$HOME/miniconda
 
-cache: pip
+cache:
+ directories:
+  - $MINICONDA
+
+before_install:
+  - |
+    if [ -d "$MINICONDA" ] && [ -e "$MINICONDA/bin/conda" ]; then
+      echo "Miniconda install already present from cache: $MINICONDA"
+    else
+      rm -rf "$MINICONDA" # remove the directory in case we have an empty cached directory
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+      bash miniconda.sh -b -p $MINICONDA
+    fi
+  - export PATH="$MINICONDA/bin:$PATH"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - export CONDA_ENVS=$(conda env list)
+  - |
+    if [[ $CONDA_ENVS == *$REPO* ]]; then
+    conda update -n $REPO --all
+    else
+    sed -i -e '/nb_conda/d' -e '/jupyter/d' conda_environment.yml
+    echo "  - nomkl" >> conda_environment.yml
+    conda env create -f conda_environment.yml nomkl
+    fi
+  -
+  - source activate $REPO
 
 install:
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda config --set always_yes yes --set changeps1 no
-  - conda info -a
-  - conda create -n $REPO python=$TRAVIS_PYTHON_VERSION
-  - source activate $REPO
-  - conda install nomkl --file requirements.txt
-  - pip install codecov
   - export PYTHONPATH=$PYTHONPATH:$PWD
-
 
 script:
   - nosetests --cover-package=$REPO --with-coverage

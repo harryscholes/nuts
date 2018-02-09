@@ -1,0 +1,14 @@
+name: nuts
+channels:
+  - defaults
+dependencies:
+  - python=3.6
+  - numpy
+  - scipy
+  - networkx
+  - jupyter
+  - nb_conda
+  - pytables
+  - nose
+  - pip:
+    - codecov
