@@ -131,10 +131,14 @@ class Kernel(object):
             "Kernel HDF5 file does not exist at `filepath`"
 
         with tables.open_file(filepath, "r") as fileobj:
-            kernel = read_from_hdf5(fileobj)
+            contents = read_from_hdf5(fileobj)
 
-        self.kernel = kernel
-        return kernel
+        self.kernel = contents[0]
+
+        if len(contents) == 2:
+            self.mapping = contents[1]
+
+        return contents
 
 
 def _valid_eigenvalues(eigenvalues, tolerance=np.finfo(float).eps):
