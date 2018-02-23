@@ -1,7 +1,7 @@
 import numpy as np
 import tables
 
-from ..io import write_to_hdf5, load_from_hdf5
+from ..io import write_to_hdf5, read_from_hdf5
 
 
 def test_write_to_hdf5():
@@ -37,7 +37,7 @@ def test_write_to_hdf5():
     fileobj.close()
 
 
-def test_load_from_hdf5():
+def test_read_from_hdf5():
     target = np.arange(4)
 
     # load a kernel matrix
@@ -45,7 +45,7 @@ def test_load_from_hdf5():
                                driver_core_backing_store=0)
     assert isinstance(fileobj, tables.file.File)
     fileobj = write_to_hdf5(target, fileobj)
-    loaded = load_from_hdf5(fileobj)
+    loaded = read_from_hdf5(fileobj)
     assert (target == loaded).all()
 
     # load with mapping dictionary
@@ -54,7 +54,7 @@ def test_load_from_hdf5():
     assert isinstance(fileobj, tables.file.File)
     target = {"a": 0, "b": 1}
     fileobj = write_to_hdf5(np.arange(4), fileobj, mapping=target)
-    kernel, loaded = load_from_hdf5(fileobj)
+    kernel, loaded = read_from_hdf5(fileobj)
     loaded = {k.decode(): int(v.decode()) for (k, v) in loaded}
     assert target == loaded
     fileobj.close()
