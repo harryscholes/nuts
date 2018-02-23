@@ -1,5 +1,0 @@
-numpy
-scipy
-networkx>=2
-pytables
-nose
