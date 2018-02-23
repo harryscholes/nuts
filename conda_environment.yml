@@ -7,7 +7,7 @@ dependencies:
   - scipy
   - networkx
   - jupyter
-  - nb_conda
+  - nb_conda_kernels
   - pytables
   - nose
   - pip:
