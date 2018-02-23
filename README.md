@@ -4,7 +4,7 @@ Python package for calculating kernels on graphs.
 ## Requirements
 
 [Anaconda](https://anaconda.org/)
- 
+
 ## Installation
 
 ```bash
@@ -24,7 +24,8 @@ G = nx.erdos_renyi_graph(10, 0.2, seed=1)
 
 the commute time kernel can be calculated by:
 ```python
-k = Kernel(G)
+k = Kernel()
+k.graph(G)
 k.calculate("CT")
 ```
 
@@ -45,26 +46,27 @@ The kernel can be written to, and read from, HDF5 using:
 ```python
 k.write(filepath, *args)
 
-from nuts import load_from_hdf5
-load_from_hdf5(filepath)
+k = Kernel()
+kernel, mapping = k.read(filepath)
 ```
 
 ## Example workflow
 ```python
 import networkx as nx
-from nuts import Kernel, load_from_hdf5
+from nuts import Kernel
 
 G = nx.erdos_renyi_graph(10, 0.2, seed=1)
 
-k = Kernel(G)
+k = Kernel()
+k.graph(G)
 k.calculate("CT")
 
 if not k.valid():
     k.make_valid()
-    
+
 k.normalize()
 k.write("kernel.h5")
 
-kernel, mapping = load_from_hdf5("kernel.h5")
+k = Kernel()
+kernel, mapping = k.read("kernel.h5")
 ```
-    
