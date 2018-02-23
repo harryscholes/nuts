@@ -1,3 +1,3 @@
-conda env create -n nuts4 -f conda_environment.yml
+conda env create -n nuts -f conda_environment.yml
 source activate nuts
-export PYTHONPATH=$PYTHONPATH:$PWD
+pip install -e .
