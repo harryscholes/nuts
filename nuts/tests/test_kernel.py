@@ -1,6 +1,7 @@
 import numpy as np
 import networkx as nx
 from nose.tools import assert_raises
+import os
 
 from ..kernel import _valid_eigenvalues, _normalize, Kernel
 from ..exceptions import InvalidKernel
@@ -95,6 +96,19 @@ class test_Kernel():
         # mixture of positive and negative
         k = factory([-1, 2])
         assert k.is_valid
+
+    def test_read_write(self):
+        filepath = "testing.h5"
+        self.k.write(filepath)
+
+        k2 = Kernel()
+        kernel, mapping = k2.read(filepath)
+
+        assert np.allclose(self.k.kernel, kernel)
+        assert dict(mapping) == self.k.mapping
+
+        os.remove(filepath)
+
 
 
 def test_valid():
