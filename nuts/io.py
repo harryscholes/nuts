@@ -3,7 +3,7 @@
 import numpy as np
 import tables
 
-__all__ = ["write_to_hdf5", "load_from_hdf5"]
+__all__ = ["write_to_hdf5", "read_from_hdf5"]
 
 
 def write_to_hdf5(kernel, fileobj, mapping=None, compression=False):
@@ -31,7 +31,7 @@ def write_to_hdf5(kernel, fileobj, mapping=None, compression=False):
     return f
 
 
-def load_from_hdf5(fileobj):
+def read_from_hdf5(fileobj):
     with fileobj as f:
         kernel = getattr(f.root, 'kernel').read()
 

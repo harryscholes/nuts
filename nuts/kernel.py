@@ -1,11 +1,13 @@
 """ Calculate kernels of graphs. """
 
 import numpy as np
+import networkx as nx
 import tables
+import os
 
 from .kernel_functions import CT
 from .exceptions import InvalidKernel
-from .io import write_to_hdf5
+from .io import write_to_hdf5, read_from_hdf5
 
 __all__ = ["Kernel"]
 
@@ -13,11 +15,22 @@ __all__ = ["Kernel"]
 class Kernel(object):
     """
     Calculate kernels of graphs.
-
-    Args:
-        G (nx.Graph): graph with which to calculate the kernel
     """
-    def __init__(self, G):
+    def __init__(self, **kwargs):
+        pass
+        # allowed_kwargs = ["G", "filepath"]
+        #
+        # for arg in kwargs:
+        #     setattr(self, arg, kwargs[arg])
+
+    def graph(self, G):
+        """
+        Load a graph into nuts.
+
+        Args:
+            G (nx.Graph): graph with which to calculate the kernel
+        """
+        assert isinstance(G, nx.Graph), "`G` must be nx.Graph"
         self.G = G
 
     def calculate(self, kernel_function):
@@ -106,6 +119,22 @@ class Kernel(object):
                           mapping=self.mapping if save_mapping is True else None,
                           compression=compression,
                           )
+
+    def read(self, filepath):
+        """
+        Read a kernel into nuts.
+
+        Args:
+            filepath (str): filepath to kernel HDF5 file
+        """
+        assert os.path.isfile(filepath), \
+            "Kernel HDF5 file does not exist at `filepath`"
+
+        with tables.open_file(filepath, "r") as fileobj:
+            kernel = read_from_hdf5(fileobj)
+
+        self.kernel = kernel
+        return kernel
 
 
 def _valid_eigenvalues(eigenvalues, tolerance=np.finfo(float).eps):

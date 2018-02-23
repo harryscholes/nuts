@@ -4,14 +4,25 @@ from nose.tools import assert_raises
 
 from ..kernel import _valid_eigenvalues, _normalize, Kernel
 from ..exceptions import InvalidKernel
+from ..kernel_functions import CT
 
 
 class test_Kernel():
     def __init__(self):
         G = nx.path_graph(range(2))
-        k = Kernel(G)
+        self.initial_graph = G
+        k = Kernel()
         self.k = k
+        self.k.graph(self.initial_graph)
         self.k.calculate("CT")
+
+    def test_graph(self):
+        assert self.k.G == self.initial_graph
+        assert isinstance(self.k.G, nx.Graph)
+
+    def test_calculate(self):
+        self.k.calculate("CT")
+        assert np.allclose(self.k.kernel, CT(self.k.G))
 
     def test_valid(self):
         # all positive
