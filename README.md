@@ -6,10 +6,23 @@ Python package for calculating kernels on graphs.
 [Anaconda](https://anaconda.org/)
 
 ## Installation
+nuts can be installed locally or via a Docker container.
 
+### Local
 ```bash
 bash install.sh
 ```
+
+### Docker container
+```bash
+docker run \
+    -p 8888:8888 \
+    -v $PWD:/home/mount_volume \
+    -it \
+    harryscholes/nuts:latest
+```
+
+To mount a different directory in the container, substitute `$PWD` with your directory's path. This allows the container to read and write to the host filesystem.
 
 ## Quick start guide
 
