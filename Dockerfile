@@ -38,4 +38,4 @@ RUN apk --no-cache add --virtual build-dependencies \
 
 ENTRYPOINT ["/sbin/tini", "--"]
 ENV VOLUME /home/volume
-CMD ["/bin/sh"]
+CMD ["python"]

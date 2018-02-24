@@ -1,28 +1,30 @@
 # nuts [![Build Status](https://travis-ci.org/harryscholes/nuts.svg?branch=master)](https://travis-ci.org/harryscholes/nuts) [![Coverage Status](https://codecov.io/gh/harryscholes/nuts/branch/master/graph/badge.svg)](https://codecov.io/gh/harryscholes/nuts?branch=master)
 Python package for calculating kernels on graphs.
 
-## Requirements
-
-[Anaconda](https://anaconda.org/)
-
 ## Installation
 nuts can be installed locally or via a Docker container.
 
-### Local
+### Using Conda
+
+#### Requirements
+[Anaconda](https://anaconda.org/) or [Miniconda](https://conda.io/miniconda.html)
+
+#### Install
 ```bash
 bash install.sh
 ```
 
-### Docker container
+### Using Docker
+
+#### Requirements
+[Docker](https://www.docker.com/)
+
+#### Install
 ```bash
-docker run \
-    -p 8888:8888 \
-    -v $PWD:/home/mount_volume \
-    -it \
-    harryscholes/nuts:latest
+docker run -v $PWD:/home/volume -it harryscholes/nuts:latest
 ```
 
-To mount a different directory in the container, substitute `$PWD` with your directory's path. This allows the container to read and write to the host filesystem.
+This mounts the current working directory in the container and allows it to read and write to the host filesystem. To mount a different directory, substitute `$PWD` with the directory's path.
 
 ## Quick start guide
 
