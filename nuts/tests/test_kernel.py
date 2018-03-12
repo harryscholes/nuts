@@ -32,21 +32,21 @@ class test_Kernel():
 
         # all negative
         self.k.eigenvalues = [-1, -2]
-        assert_raises(InvalidKernel, self.k.valid)
+        assert self.k.valid() is False
 
         # mixture of positive and negative
         self.k.eigenvalues = [1, -2]
-        assert_raises(InvalidKernel, self.k.valid)
+        assert self.k.valid() is False
 
         # negative value equal to the default tolerance
         self.k.eigenvalues = [1, -np.finfo(float).eps]
-        assert_raises(InvalidKernel, self.k.valid)
+        assert self.k.valid() is False
 
         # custom tolerance values
         self.k.eigenvalues = [1, 2]
         assert self.k.valid(tolerance=0.1)
         self.k.eigenvalues = [-0.3, -0.1]
-        assert_raises(InvalidKernel, self.k.valid, tolerance=0.2)
+        assert self.k.valid(tolerance=0.2) is False
 
     def test_normalize(self):
         target = np.array([[1., 1.5], [1.5, 1.]])
@@ -83,11 +83,10 @@ class test_Kernel():
         def factory(eigenvalues):
             self.k.eigenvalues = eigenvalues
 
-            try:
-                self.k.valid()
-            except InvalidKernel:
+            if not self.k.valid():
                 self.k.make_valid()
-                return self.k
+
+            return self.k
 
         # all negative
         k = factory([-1, -2])
