@@ -18,10 +18,6 @@ class Kernel(object):
     """
     def __init__(self, **kwargs):
         pass
-        # allowed_kwargs = ["G", "filepath"]
-        #
-        # for arg in kwargs:
-        #     setattr(self, arg, kwargs[arg])
 
     def graph(self, G):
         """
@@ -72,9 +68,13 @@ class Kernel(object):
         self.tolerance = tolerance
         self.is_valid = False
 
-        if _valid_eigenvalues(self.eigenvalues, self.tolerance) is True:
-            self.is_valid = True
-            return True
+        try:
+            if _valid_eigenvalues(self.eigenvalues, self.tolerance) is True:
+                self.is_valid = True
+                return True
+
+        except InvalidKernel:
+            return False
 
     def make_valid(self):
         """ Make the matrix a valid kernel by shifting its eigenvalues. """
