@@ -5,7 +5,7 @@ import networkx as nx
 import tables
 import os
 
-from .kernel_functions import CT
+from .kernel_functions import CT, RWR
 from .exceptions import InvalidKernel
 from .io import write_to_hdf5, read_from_hdf5
 
@@ -39,6 +39,7 @@ class Kernel(object):
 
         available_kernels = {
             "CT": CT,
+            "RWR": RWR,
         }
 
         self.kernel_function = available_kernels[kernel_function]
